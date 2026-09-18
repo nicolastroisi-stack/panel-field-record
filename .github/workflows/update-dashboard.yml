@@ -2,8 +2,8 @@ name: Actualizar panel
 
 on:
   schedule:
-    # Todos los dias a las 11:00 UTC (~8am Argentina)
-    - cron: "0 11 * * *"
+    # Cada 15 minutos, todo el dia
+    - cron: "*/15 * * * *"
   workflow_dispatch: {}
 
 permissions:
