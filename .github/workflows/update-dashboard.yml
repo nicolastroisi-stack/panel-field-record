@@ -30,11 +30,13 @@ jobs:
         run: echo "$GA_SERVICE_ACCOUNT_JSON" > ga_credentials.json
 
       - name: Traer datos de Google Analytics
+        continue-on-error: true
         env:
           GA_CRED_PATH: ga_credentials.json
         run: python scripts/fetch_ga.py
 
       - name: Traer datos de Meta Ads
+        continue-on-error: true
         env:
           META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
           META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID }}
