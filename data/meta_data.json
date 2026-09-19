@@ -3,5 +3,5 @@
   "no_data": true,
   "active_campaigns": 5,
   "error": "400 Client Error: Bad Request for url: https://graph.facebook.com/v21.0/act_2124161355153831/insights?fields=impressions%2Cclicks%2Cspend%2Creach%2Cctr%2Ccpc%2Cactions&date_preset=last_30d&level=account",
-  "error_at": "2026-09-19T21:25:07.816490+00:00"
+  "error_at": "2026-09-19T21:36:47.655827+00:00"
 }
