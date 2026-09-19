@@ -9,14 +9,34 @@ Espera las variables de entorno:
 """
 import json
 import os
+import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
 
 GRAPH_VERSION = "v21.0"
+OUT_PATH = Path("data/meta_data.json")
 
 
-def main():
+def load_previous():
+    """Si ya hay un data/meta_data.json de una corrida anterior, lo usamos
+    como base para no perder el ultimo dato bueno si esta corrida falla."""
+    if OUT_PATH.exists():
+        try:
+            return json.loads(OUT_PATH.read_text())
+        except (json.JSONDecodeError, OSError):
+            return {}
+    return {}
+
+
+def write_result(result):
+    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    OUT_PATH.write_text(json.dumps(result, indent=2, ensure_ascii=False))
+    print(json.dumps(result, indent=2, ensure_ascii=False))
+
+
+def fetch():
     token = os.environ["META_ACCESS_TOKEN"]
     ad_account_id = os.environ["META_AD_ACCOUNT_ID"]
 
@@ -65,10 +85,28 @@ def main():
             "cpc": float(row.get("cpc", 0)) if row.get("cpc") else 0.0,
         }
 
-    out_path = Path("data/meta_data.json")
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(result, indent=2, ensure_ascii=False))
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    result["fetched_at"] = datetime.now(timezone.utc).isoformat()
+    return result
+
+
+def main():
+    try:
+        result = fetch()
+        write_result(result)
+    except Exception as exc:  # noqa: BLE001 - queremos capturar cualquier falla de red/API
+        # No dejamos que un error de la API de Meta (token vencido, cuenta
+        # bloqueada, rate limit, etc.) tire abajo todo el panel. Guardamos
+        # el ultimo dato bueno que tengamos y marcamos el error, pero
+        # salimos con codigo 0 para que el resto del workflow siga.
+        print(f"[error] fetch_meta.py fallo: {exc}", file=sys.stderr)
+        previous = load_previous()
+        previous["ok"] = False
+        previous["error"] = str(exc)
+        previous["error_at"] = datetime.now(timezone.utc).isoformat()
+        # Si nunca hubo una corrida buena antes, dejamos no_data en True
+        # para que el panel muestre el mensaje de "todavia sin datos".
+        previous.setdefault("no_data", True)
+        write_result(previous)
 
 
 if __name__ == "__main__":
