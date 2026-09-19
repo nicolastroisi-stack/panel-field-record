@@ -1,5 +1,5 @@
 {
-  "ok": true,
+  "ok": false,
   "no_data": false,
   "property_name": "fieldrecordco.com",
   "sessions_28d": 164,
@@ -8,5 +8,7 @@
   "pct_new_users": 99.2,
   "avg_session_duration_fmt": "1:46",
   "engagement_rate_pct": 24.4,
-  "fetched_at": "2026-09-19T20:49:47.044262+00:00"
+  "fetched_at": "2026-09-19T20:49:47.044262+00:00",
+  "error": "503 The service is currently unavailable.",
+  "error_at": "2026-09-19T21:13:18.609149+00:00"
 }
