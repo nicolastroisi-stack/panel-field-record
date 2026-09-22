@@ -2,11 +2,11 @@
   "ok": true,
   "no_data": false,
   "property_name": "fieldrecordco.com",
-  "sessions_28d": 188,
-  "active_users_28d": 148,
-  "new_users_28d": 148,
+  "sessions_28d": 189,
+  "active_users_28d": 149,
+  "new_users_28d": 149,
   "pct_new_users": 100.0,
   "avg_session_duration_fmt": "1:33",
-  "engagement_rate_pct": 22.9,
-  "fetched_at": "2026-09-22T04:52:37.229878+00:00"
+  "engagement_rate_pct": 22.8,
+  "fetched_at": "2026-09-22T05:17:28.549940+00:00"
 }
